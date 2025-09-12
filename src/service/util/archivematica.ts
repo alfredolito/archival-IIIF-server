@@ -209,8 +209,13 @@ function createObjectsMetadata(mets: XmlDocument): Map<string, ObjectMetadata> {
             .map<[premis, XmlNode | null]>(premisNS =>
                 [premisNS, node.get(`./mets:techMD/mets:mdWrap/mets:xmlData/${premisNS}:object`, ns)])
             .find(premis => premis[1]) as [premis, XmlNode] | undefined;
-        if (!premis)
-            throw new Error(`No premis object found for AMD id ${amdId}`);
+
+        if (!premis) {
+            if (!node.get('./mets:techMD', ns))
+                break
+
+            throw new Error(`No premis object found for AMD id ${amdId}; but there is a techMD`);
+        }
 
         const [premisNS, premisObj] = premis;
         const premisMetadata = getPremisMetadata(amdId, premisObj, premisNS);
