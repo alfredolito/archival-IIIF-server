@@ -59,6 +59,7 @@ async function search(query: string, filters: { [field: string]: string | undefi
                         text: {
                             query,
                             fuzziness: !isPhraseMatch && config.searchMode === 'fuzzy' ? 'AUTO' : undefined
+                        }
                     }
                 },
                 should: undefined,
